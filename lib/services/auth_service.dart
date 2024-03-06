@@ -18,7 +18,7 @@ class Auth {
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code.toString() == StringConstants.emailAlready) {
-        log('User already exists');
+        log('User Already exists');
       } else {
         log('Error is $e');
       }
