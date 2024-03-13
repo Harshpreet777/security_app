@@ -7,25 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:366572086096:android:1e1aedc61a3f6daf324255",
-        "android_client_info": {
-          "package_name": "com.example.firebase_demo2"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCXc_sFpsG4m1IgGn7R2NJSF7AJFBkwWv8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:366572086096:android:4868d9e1fbb02a2e324255",
         "android_client_info": {
           "package_name": "com.example.firebase_demo3"

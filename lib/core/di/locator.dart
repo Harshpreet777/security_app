@@ -1,5 +1,6 @@
 import 'package:firebase_demo3/core/services/storage_service.dart';
 import 'package:firebase_demo3/core/viewmodels/login_view_model.dart';
+import 'package:firebase_demo3/core/viewmodels/sign_out_view_model.dart';
 import 'package:firebase_demo3/core/viewmodels/sign_up_view_model.dart';
 import 'package:firebase_demo3/core/viewmodels/update_profile_view_model.dart';
 import 'package:get_it/get_it.dart';
@@ -10,4 +11,5 @@ setUpLocator() {
   locator.registerLazySingleton(() => UpdateProfileViewModel());
   locator.registerLazySingleton(() => StorageService());
   locator.registerLazySingleton(() => LoginViewModel());
+  locator.registerLazySingleton(() => SignOutViewModel());
 }

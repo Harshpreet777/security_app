@@ -7,12 +7,12 @@ class TextFormFieldWidget extends StatelessWidget {
       {super.key,
       required this.textInputType,
       required this.label,
-      required this.hintText,
+      this.hintText,
       required this.validator,
       required this.controller,
       this.obscureText});
   String label;
-  String hintText;
+  String? hintText;
   final String? Function(String?)? validator;
   TextEditingController controller;
   TextInputType textInputType;
@@ -28,6 +28,7 @@ class TextFormFieldWidget extends StatelessWidget {
       controller: controller,
       validator: validator,
       decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
           label: Text(
             label,
             style: TextStyle(color: ColorConstant.black),
@@ -35,7 +36,9 @@ class TextFormFieldWidget extends StatelessWidget {
           fillColor: ColorConstant.white,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: ColorConstant.black54),
+          hintStyle: TextStyle(
+            color: ColorConstant.black54,
+          ),
           border: const OutlineInputBorder(
               borderSide: BorderSide(),
               borderRadius: BorderRadius.all(Radius.circular(8))),

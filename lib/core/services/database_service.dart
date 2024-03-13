@@ -38,6 +38,19 @@ class DataBaseService {
     return allData;
   }
 
+  Future<UserModel> getUpdatedUserData(String uid) async {
+    UserModel allData;
+    final querySnapshot = await userCollection
+        .where(
+          'uid',
+          isEqualTo: uid,
+        )
+        .get();
+    allData = querySnapshot.docs.map((e) => UserModel.fromJson(e)).single;
+
+    return allData;
+  }
+
   Future setuserDetails(UserModel userModel) async {
     return await userCollection.doc(uid).set(userModel.toJson());
   }

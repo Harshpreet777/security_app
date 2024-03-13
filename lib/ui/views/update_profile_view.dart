@@ -18,160 +18,191 @@ class UpdateProfileView extends StatelessWidget {
   UpdateProfileView({super.key, this.usersData});
   UserModel? usersData;
   late UpdateProfileViewModel model;
+  Stream<UserModel> getData() async* {
+    var data = await model.getData(usersData?.uid ?? '');
+    yield data;
+  }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<UpdateProfileViewModel>(onModelReady: (model) {
       this.model = model;
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        log(usersData?.gender ?? '');
-      });
-    }, builder: (context, model, child) {
+      SchedulerBinding.instance.addPostFrameCallback((_) async {});
+    }, builder: (context, data, child) {
       return updateProfileViewModelMethod(context);
     });
   }
 
-  SafeArea updateProfileViewModelMethod(BuildContext context) {
-    model.emailController.text = usersData?.email ?? '';
-    model.phoneNoController.text = usersData?.phoneNo ?? '';
-    model.nameController.text = usersData?.name ?? '';
+  updateProfileViewModelMethod(BuildContext context) {
     model.passController.text = usersData?.pass ?? '';
-
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      body: Form(
-        key: model.formKey,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Column(children: [
-              const SizedBox(
-                height: 40,
-              ),
-              Center(
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  padding: const EdgeInsets.all(10),
-                  child: model.photo != null
-                      ? CommonStackWidget(
-                          onpress: () {
-                            _showPicker(context);
-                          },
-                          widget: ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100)),
-                            child: Image.file(
-                              model.photo!,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        )
-                      : Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                                decoration: BoxDecoration(
-                                    color: ColorConstant.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(100))),
-                                width: 130,
-                                height: 130,
-                                child: Image.asset(
-                                  usersData?.gender == 'Male'
-                                      ? ImageConstant.maleIcon
-                                      : ImageConstant.femaleIcon,
-                                  fit: BoxFit.fill,
-                                )),
-                            Positioned(
-                              bottom: -10,
-                              right: 0,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: ColorConstant.white,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(50))),
-                                child: IconButton(
-                                    onPressed: () {
+    return StreamBuilder<UserModel>(
+        stream: getData(),
+        builder: (context, snapshot) {
+          UserModel? data = snapshot.data;
+          return SafeArea(
+              child: Scaffold(
+            backgroundColor: Colors.grey.shade200,
+            body: Form(
+              key: model.formKey,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Column(children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Center(
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        padding: const EdgeInsets.all(10),
+                        child: model.photo != null
+                            ? CommonStackWidget(
+                                onpress: () {
+                                  _showPicker(context);
+                                },
+                                widget: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(100)),
+                                  child: Image.file(
+                                    model.photo!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              )
+                            : data?.image.isNotEmpty ?? false
+                                ? CommonStackWidget(
+                                    onpress: () {
                                       _showPicker(context);
                                     },
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: ColorConstant.black,
-                                    )),
-                              ),
-                            )
-                          ],
+                                    widget: ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(100)),
+                                      child: Image.network(
+                                        data?.image ?? '',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  )
+                                : Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Container(
+                                          decoration: BoxDecoration(
+                                              color: ColorConstant.white,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(100))),
+                                          width: 130,
+                                          height: 130,
+                                          child: Image.asset(
+                                            usersData?.gender == 'Male'
+                                                ? ImageConstant.maleIcon
+                                                : ImageConstant.femaleIcon,
+                                            fit: BoxFit.fill,
+                                          )),
+                                      Positioned(
+                                        bottom: -10,
+                                        right: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: ColorConstant.white,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(50))),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                _showPicker(context);
+                                              },
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color: ColorConstant.black,
+                                              )),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    TextFormFieldWidget(
+                      hintText: data?.name ?? '',
+                      textInputType: TextInputType.name,
+                      label: StringConstants.name,
+                      controller: model.nameController,
+                      validator: (value) {
+                        return Validations.isNameValid(value.toString());
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormFieldWidget(
+                      hintText: data?.email ?? '',
+                      textInputType: TextInputType.emailAddress,
+                      label: StringConstants.email,
+                      controller: model.emailController,
+                      validator: (value) {
+                        return Validations.isEmailValid(value.toString());
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormFieldWidget(
+                      hintText: data?.phoneNo ?? '',
+                      textInputType: TextInputType.number,
+                      label: StringConstants.phoneNo,
+                      controller: model.phoneNoController,
+                      validator: (value) {
+                        return Validations.isPhoneNoValid(value.toString());
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: Text(
+                            StringConstants.gender,
+                            style: const TextStyle(fontSize: 16),
+                          ),
                         ),
+                        addRadioButton(0, 'Male'),
+                        addRadioButton(1, 'Female'),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButtonWidget(
+                      btnText: StringConstants.update,
+                      onpress: () {
+                        model.emailController.text =
+                            model.emailController.text.isEmpty
+                                ? data?.email ?? ''
+                                : model.emailController.text;
+                        model.phoneNoController.text =
+                            model.phoneNoController.text.isEmpty
+                                ? data?.phoneNo ?? ''
+                                : model.phoneNoController.text;
+                        model.nameController.text =
+                            model.nameController.text.isEmpty
+                                ? data?.name ?? ''
+                                : model.nameController.text;
+                        model.updateProfile(usersData?.uid ?? '');
+                      },
+                    )
+                  ]),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormFieldWidget(
-                hintText: usersData?.name ?? '',
-                textInputType: TextInputType.name,
-                label: StringConstants.name,
-                controller: model.nameController,
-                validator: (value) {
-                  return Validations.isNameValid(value.toString());
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormFieldWidget(
-                hintText: usersData?.email ?? '',
-                textInputType: TextInputType.emailAddress,
-                label: StringConstants.email,
-                controller: model.emailController,
-                validator: (value) {
-                  return Validations.isEmailValid(value.toString());
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormFieldWidget(
-                hintText: usersData?.phoneNo ?? '',
-                textInputType: TextInputType.number,
-                label: StringConstants.phoneNo,
-                controller: model.phoneNoController,
-                validator: (value) {
-                  return Validations.isPhoneNoValid(value.toString());
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      StringConstants.gender,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  addRadioButton(0, 'Male'),
-                  addRadioButton(1, 'Female'),
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              ElevatedButtonWidget(
-                btnText: StringConstants.update,
-                onpress: () {
-                  model.updateProfile(usersData?.uid ?? '');
-                },
-              )
-            ]),
-          ),
-        ),
-      ),
-    ));
+            ),
+          ));
+        });
   }
 
   void _showPicker(context) {
@@ -194,6 +225,7 @@ class UpdateProfileView extends StatelessWidget {
                     title: Text(StringConstants.camera),
                     onTap: () {
                       model.imgFromCamera();
+
                       Navigator.of(context).pop();
                     },
                   ),
@@ -214,6 +246,7 @@ class UpdateProfileView extends StatelessWidget {
         onChanged: (value) {
           log(value.toString());
           usersData?.gender = value;
+
           model.changeGender(usersData?.gender ?? '');
         },
       ),

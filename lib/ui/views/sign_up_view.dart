@@ -1,4 +1,5 @@
 import 'package:firebase_demo3/core/constants/color_constants.dart';
+import 'package:firebase_demo3/core/constants/image_constants.dart';
 import 'package:firebase_demo3/core/constants/string_constants.dart';
 import 'package:firebase_demo3/core/utils/validation_utils.dart';
 import 'package:firebase_demo3/core/viewmodels/sign_up_view_model.dart';
@@ -9,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 // ignore: must_be_immutable
-class SignUpView extends StatelessWidget {
-  SignUpView({super.key});
+class SignInView extends StatelessWidget {
+  SignInView({super.key});
 
   late SignUpViewModel model;
   @override
@@ -115,7 +116,33 @@ class SignUpView extends StatelessWidget {
                 onpress: () {
                   model.onPressSignUp(context);
                 },
-              )
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorConstant.black),
+                  onPressed: () {
+                    model.onPressGoogleSignIn(context);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          StringConstants.googleSignIn,
+                          style: TextStyle(
+                              color: ColorConstant.white, fontSize: 16),
+                        ),
+                      ),
+                      Image.asset(
+                        ImageConstant.googleIcons,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
+                  )),
             ]),
           ),
         ),

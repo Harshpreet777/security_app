@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_demo3/core/models/user_model.dart';
@@ -44,7 +45,7 @@ class UpdateProfileViewModel extends BaseModel {
   }
 
   changeGender(String gender) {
-    select=gender;
+    select = gender;
     updateUI();
   }
 
@@ -54,15 +55,20 @@ class UpdateProfileViewModel extends BaseModel {
     }
     final fileName = basename(photo?.path ?? '');
     image = fileName;
-
+    log('filename $fileName');
+    log('photo $photo');
     try {
-      final ref = _firebaseStorage.ref().child(fileName);
+      final ref = _firebaseStorage.ref().child('/images').child(fileName);
       await ref.putFile(photo!);
       final url = await ref.getDownloadURL();
       debugPrint('url is $url');
     } catch (e) {
       debugPrint('error is $e');
     }
+  }
+
+  Future<UserModel> getData(String id) async {
+    return await DataBaseService().getUpdatedUserData(id);
   }
 
   void updateProfile(String uid) async {
@@ -81,6 +87,7 @@ class UpdateProfileViewModel extends BaseModel {
           image: image,
           pass: pass,
           gender: select));
+      updateUI();
     }
   }
 }

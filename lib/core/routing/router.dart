@@ -1,6 +1,7 @@
 import 'package:firebase_demo3/core/models/user_model.dart';
 import 'package:firebase_demo3/core/routing/routes.dart';
 import 'package:firebase_demo3/ui/views/login_view.dart';
+import 'package:firebase_demo3/ui/views/sign_out_view.dart';
 import 'package:firebase_demo3/ui/views/sign_up_view.dart';
 import 'package:firebase_demo3/ui/views/update_profile_view.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,12 @@ class PageRouter {
               usersData: userModel,
             ),
             settings);
+      case Routes.sighOutRoute:
+        return pageRoute( SignOutView(), settings);
       case Routes.loginRoute:
         return pageRoute(LoginView(), settings);
       case Routes.signUpRoute:
-        return pageRoute(SignUpView(), settings);
+        return pageRoute(SignInView(), settings);
       default:
         return MaterialPageRoute(
             builder: (BuildContext conktext) => const Scaffold(

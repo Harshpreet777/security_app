@@ -22,4 +22,5 @@ class StringConstants {
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
   static String isValidEmpty = "Cannot be Empty";
   static String passValid = 'Password is Not Valid';
+  static String googleSignIn='SignIn With Google';
 }
