@@ -22,16 +22,19 @@ class DataBaseService {
     }
   }
 
-  Future<UserModel> getUserData(String email, String pass) async {
+  Future<UserModel> getUserData(
+    String email,
+    String pass,
+  ) async {
     UserModel allData;
     final querySnapshot = await userCollection
         .where(
           'email',
           isEqualTo: email,
         )
-        .where('pass', isEqualTo: pass)
         .get();
     allData = querySnapshot.docs.map((e) => UserModel.fromJson(e)).single;
+    
     if (allData.email != email) {
       log('Email does not Exist');
     }

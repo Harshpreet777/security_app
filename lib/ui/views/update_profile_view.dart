@@ -217,14 +217,14 @@ class UpdateProfileView extends StatelessWidget {
                       leading: const Icon(Icons.photo_library),
                       title: Text(StringConstants.gallery),
                       onTap: () {
-                        model.imgFromGallery();
+                        model.permissionForGallery(context);
                         Navigator.of(context).pop();
                       }),
                   ListTile(
                     leading: const Icon(Icons.photo_camera),
                     title: Text(StringConstants.camera),
                     onTap: () {
-                      model.imgFromCamera();
+                      model.permissionForCamera(context);
 
                       Navigator.of(context).pop();
                     },

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "366572086096",
-    "project_id": "fir-project-4264d",
-    "storage_bucket": "fir-project-4264d.appspot.com"
+    "project_number": "209702833420",
+    "project_id": "security-demo-72990",
+    "storage_bucket": "security-demo-72990.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:366572086096:android:4868d9e1fbb02a2e324255",
+        "mobilesdk_app_id": "1:209702833420:android:b9690f04c50fbba44f4d29",
         "android_client_info": {
           "package_name": "com.example.firebase_demo3"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCXc_sFpsG4m1IgGn7R2NJSF7AJFBkwWv8"
+          "current_key": "AIzaSyBkH7pfFKkZkJA-1evULlp9o1Qx6o_WCtI"
         }
       ],
       "services": {

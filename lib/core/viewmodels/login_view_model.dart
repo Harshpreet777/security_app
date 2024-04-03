@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_demo3/core/models/user_model.dart';
 import 'package:firebase_demo3/core/routing/routes.dart';
 import 'package:firebase_demo3/core/services/database_service.dart';
+import 'package:firebase_demo3/core/services/encrypt_decrypt.dart';
 import 'package:firebase_demo3/core/viewmodels/base_model.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +22,18 @@ class LoginViewModel extends BaseModel {
     if (formKey.currentState?.validate() ?? false) {
       try {
         UserModel data = await getData();
-        if (context.mounted) {
-          Navigator.of(context)
-              .pushNamed(Routes.updateProfileRoute, arguments: data);
+        String passDecrypt =
+            (await EncryptDecrypt.decryptAES(uid: data.uid, text: data.pass));
+        log(passDecrypt.toString());
+        if (passDecrypt == passController.text) {
+          if (context.mounted) {
+            Navigator.of(context)
+                .pushNamed(Routes.updateProfileRoute, arguments: data);
+          }
         }
       } catch (e) {
         log('Email or Password does not Exist');
+        log('error is $e');
       }
     }
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_demo3/core/models/user_model.dart';
 import 'package:firebase_demo3/core/routing/routes.dart';
 import 'package:firebase_demo3/core/services/database_service.dart';
+import 'package:firebase_demo3/core/services/encrypt_decrypt.dart';
 import 'package:firebase_demo3/core/services/google_auth.dart';
 import 'package:firebase_demo3/core/viewmodels/base_model.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class SignUpViewModel extends BaseModel {
   final TextEditingController nameController = TextEditingController();
 
   String image = '';
+  String uid = '';
 
   List genderList = ["Male", "Female"];
 
@@ -37,32 +39,36 @@ class SignUpViewModel extends BaseModel {
     bool isSignIn = await GoogleAuth().signInWithGoogle();
     updateUI();
     if (isSignIn == true) {
-      
       if (context.mounted) {
         Navigator.of(context).pushNamed(Routes.sighOutRoute);
       }
-    }
-    else{
+    } else {
       debugPrint('Not Sign In');
     }
   }
 
   void onPressSignUp(BuildContext context) async {
     var rng = Random();
-    String uid = "";
-    for (int i = 0; i < 2; i++) {
-      uid += rng.nextInt(1000000).toString();
+    uid = "";
+    for (int i = 0; i < 16; i++) {
+      uid += rng.nextInt(9).toString();
     }
-    String email = emailController.text;
-    String name = nameController.text;
-    String phoneNo = phoneNoController.text;
-    String pass = passController.text;
+
+    String name =
+        (await EncryptDecrypt.encryptAES(uid: uid, text: nameController.text))
+            .base64;
+    String phoneNo = (await EncryptDecrypt.encryptAES(
+            uid: uid, text: phoneNoController.text))
+        .base64;
+    String pass =
+        (await EncryptDecrypt.encryptAES(uid: uid, text: passController.text))
+            .base64;
     if (formKey.currentState?.validate() ?? false) {
       bool isUserExist = await getUserEmail();
       if (isUserExist == false) {
         await DataBaseService(uid: uid).setuserDetails(UserModel(
             uid: uid,
-            email: email,
+            email: emailController.text,
             name: name,
             phoneNo: phoneNo,
             image: image,
